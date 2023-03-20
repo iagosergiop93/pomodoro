@@ -1,0 +1,20 @@
+.side-bar {
+    width: 350px;
+    height: 100vh;
+
+    background: #E44646;
+    color: #fff;
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.side-bar-title {
+    color: #fff;
+    text-align: center;
+}
+
+.side-bar li {
+    font-weight: 500;
+}
