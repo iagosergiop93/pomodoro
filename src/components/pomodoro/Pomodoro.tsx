@@ -3,11 +3,9 @@ import { Timer } from '../timer/Timer';
 import './Pomodoro.css';
 
 type PomodoroProps = {
-	pomodoroTime: number,
+	duration: number
 	finishSignal?: Function
 }
-
-const POMODORO_TIME = 0.1 * 60;
 
 export function Pomodoro(props: PomodoroProps) {
 
@@ -28,7 +26,7 @@ export function Pomodoro(props: PomodoroProps) {
 
 	return (
 		<div className='pomodoro'>
-			<Timer finishSignal={finishPomodoro} isClockRunning={isClockRunning} time={POMODORO_TIME}/>
+			<Timer finishSignal={finishPomodoro} isClockRunning={isClockRunning} time={props.duration}/>
 			<div className='btn-container'>
 				<button onClick={runTimer}>Run</button>
 				<button onClick={pauseTimer}>Pause</button>

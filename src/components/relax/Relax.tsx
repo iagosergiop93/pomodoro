@@ -4,35 +4,30 @@ import './Relax.css';
 
 type RelaxProps = {
     startClock: boolean
-    finishRelaxMode: Function
+    duration: number
+    finishRelaxMode?: Function
 }
-
-declare const YT: any; 
-
-const RELAX_TIME = 0.25 * 60;
 
 export function Relax(props: RelaxProps) {
 
     useEffect(() => {
         if(props.startClock) {
             setTimeout(() => {
-                props.finishRelaxMode();
+                if(props.finishRelaxMode) props.finishRelaxMode();
             }, 5*60*1000)
         }
     })
 
     const leaveRelaxMode = () => {
-        props.finishRelaxMode()
+        if(props.finishRelaxMode) props.finishRelaxMode()
     }
-
-    const isClockRunning = true;
 
     return (
         <div className='relax'>
             <Timer 
                 finishSignal={leaveRelaxMode} 
-                isClockRunning={isClockRunning} 
-                time={RELAX_TIME} 
+                isClockRunning={true} 
+                time={props.duration} 
                 desc={true}
             />
 			<iframe 
