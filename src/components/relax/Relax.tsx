@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Timer } from '../timer/Timer';
 import './Relax.css';
 
 type RelaxProps = {
@@ -8,24 +9,12 @@ type RelaxProps = {
 
 declare const YT: any; 
 
+const RELAX_TIME = 0.25 * 60;
+
 export function Relax(props: RelaxProps) {
 
     useEffect(() => {
         if(props.startClock) {
-            console.log('Starting clock')
-            var player = new YT.Player('relax',{
-                height: '315',
-                width: '560',
-                videoId: '25BkVBgFD9Y',
-                playerVars: {
-                'playsinline': 1
-                },
-                events: {
-                    'onReady': (event: any) => {
-                        event.target.playVideo();
-                    }
-                }
-            })
             setTimeout(() => {
                 props.finishRelaxMode();
             }, 5*60*1000)
@@ -36,9 +25,17 @@ export function Relax(props: RelaxProps) {
         props.finishRelaxMode()
     }
 
+    const isClockRunning = true;
+
     return (
         <div className='relax'>
-            <iframe 
+            <Timer 
+                finishSignal={leaveRelaxMode} 
+                isClockRunning={isClockRunning} 
+                time={RELAX_TIME} 
+                desc={true}
+            />
+			<iframe 
                 id='player'
                 width="560" 
                 height="315" 

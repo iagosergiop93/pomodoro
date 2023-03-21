@@ -2,28 +2,25 @@ import React, { useEffect, useState } from 'react';
 import './Timer.css';
 
 type TimerProps = {
-	pomodoroTime: number,
-	finishSignal?: Function
+	time: number,
+	isClockRunning: boolean,
+	finishSignal: Function,
+	desc?: boolean
 }
-
-const POMODORO_TIME = 0.5 * 60;
 
 export function Timer(props: TimerProps) {
 
-	const [timeSeconds, setTimeSeconds] = useState(0);
-	const [isClockRunning, setIsClockRunning] = useState(false);
+	const [timeSeconds, setTimeSeconds] = useState(props.desc ? props.time : 0);
 
 	let intervalID: any
 
 	useEffect(() => {
-		console.log('Effect')
-		if(isClockRunning && timeSeconds == POMODORO_TIME) {
-			finishPomodoro();
+		if(isTimeOver()) {
+			props.finishSignal();
 		}
-		else if(isClockRunning) {
+		else if(props.isClockRunning) {
 			intervalID = setInterval(() => {
-				// console.log('adding')
-				setTimeSeconds(timeSeconds+1)
+				incrementTime()
 			},1000)
 	
 			return () => {
@@ -32,18 +29,26 @@ export function Timer(props: TimerProps) {
 		}
 	})
 
-	const runTimer = () => {
-		setIsClockRunning(true);
+	const incrementTime = () => {
+		console.log('inc')
+		if(props.desc) {
+			setTimeSeconds(timeSeconds-1)
+		}
+		else {
+			setTimeSeconds(timeSeconds+1)
+		}
 	}
 
-	const pauseTimer = () => {
-		setIsClockRunning(false);
-	}
-
-	const finishPomodoro = () => {
-		setTimeSeconds(0);
-		setIsClockRunning(false);
-		if(props.finishSignal) props.finishSignal();
+	const isTimeOver = () => {
+		if(props.desc && props.isClockRunning && timeSeconds <= 0) {
+			return true;
+		}
+		else if(!props.desc && props.isClockRunning && timeSeconds >= props.time) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	const minutes = () => {
@@ -61,13 +66,6 @@ export function Timer(props: TimerProps) {
 			<span className='running-time'>
 				{minutes()}:{remainingSeconds()}
 			</span>
-			<div className='btn-container'>
-				<button onClick={runTimer}>Run</button>
-				<button onClick={pauseTimer}>Pause</button>
-			</div>
-			{/* <div className='btn-container'>
-				<button onClick={finishPomodoro} className='restart'>Finish</button>
-			</div> */}
 		</div>
 	);
 }
